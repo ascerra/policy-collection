@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: thanos-object-storage
+  namespace: open-cluster-management-observability
+type: Opaque
+stringData:
+  thanos.yaml: |
+    type: SWIFT
+    config:
+      auth_url: "https://rhos-d.infra.prod.upshift.rdu2.redhat.com:13000/v3"
+      username: "psi-mps-bot"
+      user_domain_name: ""
+      user_domain_id: ""
+      user_id: ""
+      password: "REDACTED"
+      domain_id: ""
+      domain_name: "redhat.com"
+      project_id: "ae35843043104538893bbedba5421ed5"
+      project_name: "mps"
+      project_domain_id: "62cf1b5ec006489db99e2b0ebfb55f57"
+      project_domain_name: ""
+      region_name: "regionOne"
+      container_name: "TBD"
+      large_object_chunk_size: 1073741824
+      large_object_segments_container_name: ""
+      retries: 3
+      connect_timeout: 10s
+      timeout: 5m
+      use_dynamic_large_objects: false
+---
+apiVersion: observability.open-cluster-management.io/v1beta2
+kind: MultiClusterObservability
+metadata:
+  name: observability
+spec:
+  observabilityAddonSpec: {}
+  storageConfig:
+    metricObjectStorage:
+      name: thanos-object-storage
+      key: thanos.yaml
